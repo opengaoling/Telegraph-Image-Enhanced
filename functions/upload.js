@@ -51,9 +51,12 @@ export async function onRequestPost(context) {
 
         // 将文件信息保存到 KV 存储
         if (env.img_url) {
+            const now = Date.now();
             await env.img_url.put(`${fileId}.${fileExtension}`, "", {
                 metadata: {
-                    TimeStamp: Date.now(),
+                    TimeStamp: now,
+                    CreatedAt: now,
+                    UpdatedAt: now,
                     ListType: "None",
                     Label: "None",
                     liked: false,

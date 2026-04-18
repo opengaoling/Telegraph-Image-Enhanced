@@ -77,6 +77,16 @@
             style="width: 100%">
             <el-table-column label="name" prop="name">
             </el-table-column>
+            <el-table-column label="上传时间" prop="createdAt" width="180">
+              <template slot-scope="scope">
+                <span>{{ formatTime(scope.row.createdAt) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="修改时间" prop="updatedAt" width="180">
+              <template slot-scope="scope">
+                <span>{{ formatTime(scope.row.updatedAt) }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="preview" prop="preview" align="center">
               <template slot-scope="scope">
                 <video v-if="scope.row.name.indexOf('.mp4')>0" style="width: 100%; height: 180px;" controls>
@@ -270,6 +280,13 @@
             this.Number = this.tableData.length;
           })
           .catch(() => alert("同步失败，请检查网络"));
+      },
+      formatTime(timestamp) {
+        if (!timestamp) return '-';
+        const d = new Date(Number(timestamp));
+        if (Number.isNaN(d.getTime())) return '-';
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
       },
     },
 

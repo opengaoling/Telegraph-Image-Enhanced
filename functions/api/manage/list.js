@@ -11,7 +11,21 @@ export async function onRequest(context) {
   const prefix = url.searchParams.get("prefix") || undefined;
   const value = await env.img_url.list({ limit, cursor, prefix });
 
-  return new Response(JSON.stringify(value), {
+  const keys = (value.keys || []).map((item) => {
+    const metadata = item.metadata || {};
+    const createdAt = metadata.CreatedAt || metadata.TimeStamp || null;
+    const updatedAt = metadata.UpdatedAt || metadata.CreatedAt || metadata.TimeStamp || null;
+    return {
+      ...item,
+      createdAt,
+      updatedAt,
+    };
+  });
+
+  return new Response(JSON.stringify({
+    ...value,
+    keys,
+  }), {
     headers: { "Content-Type": "application/json" }
   });
 }
