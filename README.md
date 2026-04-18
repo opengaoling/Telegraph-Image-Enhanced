@@ -4,32 +4,27 @@
 
 ## 🌟 增强功能
 
-- **强制 HTTP Basic Auth**: 放弃了不稳定的 Session 登录，采用浏览器原生鉴权，彻底杜绝后台泄露风险。
-- **一键自动化部署**: 提供 `deploy.sh` 脚本，仅需提供 Token 即可完成从 KV 创建到代码上线的全流程。
-- **管理入口集成**: 首页通过 JS 注入隐蔽的管理入口，兼顾美观与实用。
-- **多媒体支持**: 后端逻辑优化，支持图片、视频、音频甚至 ZIP 压缩包的上传与 Telegram 备份。
+- **正经登录页面**: 告别原始的浏览器弹窗，提供 Ant Design 风格的现代登录界面 (`login.html`)。
+- **强制鉴权与自动跳转**: 完善的中间件逻辑。未登录访问后台会自动重定向至登录页，API 接口严格校验，杜绝数据泄露。
+- **一键自动化部署**: 提供交互式 `deploy.sh` 脚本，支持参数传入或向导式输入，自动获取 Account ID，小白也能轻松上线。
+- **管理入口集成**: 首页底部隐蔽集成管理入口，兼顾美观与操作便利性。
+- **多媒体支持**: 优化后端逻辑，支持图片、视频、音频及 ZIP 压缩包的上传，并同步备份至 Telegram。
 
 ## 🛠️ 快速开始：一键部署
 
-我们提供了一个全自动部署脚本，你只需要准备好以下信息：
-
-1. **Cloudflare API Token**: 需要 Pages 和 KV 的编辑权限。
-2. **Cloudflare Account ID**: 在 CF 控制台右侧可以找到。
-3. **Telegram Bot Token**: 从 [@BotFather](https://t.me/BotFather) 获取。
-4. **Telegram Chat ID**: 从 [@userinfobot](https://t.me/userinfobot) 获取。
+我们提供了一个全自动部署脚本。你只需准备好 Cloudflare API Token、Telegram Bot Token 和 Chat ID。
 
 ### 运行部署脚本
 
 ```bash
 chmod +x deploy.sh
-./deploy.sh <CF_API_TOKEN> <ACCOUNT_ID> <TG_BOT_TOKEN> <TG_CHAT_ID>
+./deploy.sh
 ```
-
-部署完成后，你将获得一个 `https://telegraph-image-enhanced.pages.dev` 的域名。
+*脚本会启动交互式向导，引导你完成所有配置。*
 
 ## 🔐 后台管理
 
-- **管理地址**: `/admin`
+- **管理地址**: `/admin` (会自动重定向至 `/login.html`)
 - **默认账号**: `admin`
 - **默认密码**: `admin123`
 *(请在部署后通过 Cloudflare Pages 控制台的环境变量立即修改 `ADMIN_USER` 和 `ADMIN_PASS`)*
