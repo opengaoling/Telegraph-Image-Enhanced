@@ -1,16 +1,23 @@
-export async function onRequest(context) {
-    // Contents of context object
-    const {
-      request, // same as existing Worker API
-      env, // same as existing Worker API
-      params, // if filename includes [id] or [[path]]
-      waitUntil, // same as ctx.waitUntil in existing Worker API
-      next, // used for middleware or to fetch assets
-      data, // arbitrary space for passing data between middlewares
-    } = context;
-    //get the request url
-    const url = new URL(request.url);
-    //redirect to admin page
-    return Response.redirect(url.origin+"/admin.html", 302)
+export async function onRequestPost(context) {
+    const { request, env } = context;
+    const { username, password } = await request.json();
 
-  }
+    if (username === env.ADMIN_USER && password === env.ADMIN_PASS) {
+        const session = crypto.randomUUID();
+        if (env.img_url) {
+            await env.img_url.put("manage_session", session, { expirationTtl: 604800 });
+        }
+        return new Response(JSON.stringify({ success: true }), {
+            status: 200,
+            headers: {
+                'Set-Cookie': `manage_session=${session}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    return new Response(JSON.stringify({ success: false, message: "账号或密码错误" }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+    });
+}
