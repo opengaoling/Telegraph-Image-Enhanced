@@ -81,7 +81,7 @@
   <script>
     new Vue({
       el: '#app',
-      components: { 'el-image-viewer': ELEMENT.ImageViewer },
+      components: { 'el-image-viewer': ELEMENT.Image.components.ImageViewer },
       data: {
         tableData: [], selectedIds: [], isLoggedIn: false, viewMode: localStorage.getItem('viewMode') || 'list',
         showViewer: false, viewerUrls: []
