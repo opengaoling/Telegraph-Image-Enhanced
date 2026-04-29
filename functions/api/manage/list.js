@@ -2,16 +2,24 @@ export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
 
-  const raw = url.searchParams.get("limit");
-  let limit = parseInt(raw || "100", 10);
-  if (!Number.isFinite(limit) || limit <= 0) limit = 100;
-  if (limit > 1000) limit = 1000;
-
+  const limit = parseInt(url.searchParams.get("limit") || "100");
   const cursor = url.searchParams.get("cursor") || undefined;
-  const prefix = url.searchParams.get("prefix") || undefined;
-  const value = await env.img_url.list({ limit, cursor, prefix });
+  
+  const value = await env.img_url.list({ limit, cursor });
+  
+  // 在后端强制排序
+  value.keys = (value.keys || [])
+    .filter(key => !key.name.startsWith('manage_session'))
+    .sort((a, b) => {
+        const timeA = (a.metadata && a.metadata.TimeStamp) ? a.metadata.TimeStamp : 0;
+        const timeB = (b.metadata && b.metadata.TimeStamp) ? b.metadata.TimeStamp : 0;
+        return timeB - timeA;
+    });
 
   return new Response(JSON.stringify(value), {
-    headers: { "Content-Type": "application/json" }
+    headers: { 
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store'
+    }
   });
 }

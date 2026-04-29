@@ -5,18 +5,14 @@
   <title>Dashboard - Telegraph Image</title>
   <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.14/lib/theme-chalk/index.css">
   <style>
-    body { background-color: #f5f7fa; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f5f7fa; margin: 0; font-family: sans-serif; }
     .header { background: #fff; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.05); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 1000; }
     .main-content { padding: 24px; max-width: 1400px; margin: 0 auto; }
     .list-view { background: #fff; border-radius: 8px; border: 1px solid #e6ebf5; }
-    .list-item { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #f0f2f5; cursor: pointer; transition: background 0.2s; }
+    .list-item { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #f0f2f5; }
     .list-item:last-child { border-bottom: none; }
-    .list-item:hover { background: #f9fafc; }
-    .list-thumb { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; margin-right: 20px; flex-shrink: 0; background: #eee; }
-    .list-name { flex: 1; overflow: hidden; }
-    .list-title { font-weight: 600; color: #333; font-size: 14px; }
-    .list-time { font-size: 12px; color: #999; margin-top: 4px; }
-    .list-actions { display: flex; gap: 10px; }
+    .list-thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; margin-right: 15px; flex-shrink: 0; background: #eee; }
+    .list-name-col { flex: 1; overflow: hidden; }
     [v-cloak] { display: none; }
   </style>
 </head>
@@ -24,26 +20,17 @@
   <div id="app" v-cloak>
     <div class="header">
       <div style="font-size: 20px; font-weight: bold;">🖼️ Dashboard</div>
-      <div style="display: flex; gap: 15px; align-items: center;">
-        <el-button-group>
-            <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleBatchDelete">删除选中</el-button>
-            <el-button size="mini" type="info" @click="handleLogout">退出</el-button>
-        </el-button-group>
-      </div>
+      <el-button size="mini" type="info" @click="handleLogout">退出</el-button>
     </div>
     <div class="main-content">
       <div class="list-view">
-        <div v-for="(item, index) in tableData" :key="item.name" class="list-item" @click="toggleSelect(item.name)">
-          <el-checkbox :value="selectedIds.includes(item.name)" @change="toggleSelect(item.name)" style="margin-right: 15px;"></el-checkbox>
+        <div v-for="(item, index) in tableData" :key="item.name" class="list-item">
           <img :src="'/file/'+item.name" class="list-thumb" loading="lazy">
-          <div class="list-name">
-              <div class="list-title">{{ item.metadata.fileName || item.name }}</div>
-              <div class="list-time">{{ formatTime(item.metadata.TimeStamp) }}</div>
+          <div class="list-name-col">
+              <div style="font-weight: 600;">{{ item.metadata && item.metadata.fileName ? item.metadata.fileName : item.name }}</div>
+              <div style="font-size: 12px; color: #999; margin-top: 4px;">{{ formatTime(item.metadata && item.metadata.TimeStamp) }}</div>
           </div>
-          <div class="list-actions">
-            <el-button size="mini" circle icon="el-icon-document-copy" type="primary" @click.stop="handleCopy(item.name)"></el-button>
-            <el-button size="mini" circle icon="el-icon-delete" type="danger" @click.stop="handleDelete(index, item.name)"></el-button>
-          </div>
+          <el-button size="mini" circle icon="el-icon-document-copy" @click="handleCopy(item.name)"></el-button>
         </div>
       </div>
     </div>
@@ -54,44 +41,24 @@
   <script>
     new Vue({
       el: '#app',
-      data: {
-        tableData: [],
-        selectedIds: [],
-        isLoggedIn: false // Add this line
-      },
+      data: { tableData: [] },
       methods: {
         fetchData() {
             fetch('/api/manage/list?limit=100', {credentials: 'include'})
                 .then(r => {
-                    if (r.status === 401) { this.isLoggedIn = false; return null; }
-                    this.isLoggedIn = true;
+                    if (r.status !== 200) return null;
                     return r.json();
                 })
                 .then(res => {
                     if (res && res.keys) {
-                        this.tableData = res.keys.sort((a, b) => (b.metadata.TimeStamp || 0) - (a.metadata.TimeStamp || 0));
+                        this.tableData = res.keys;
                     }
-                });
+                })
+                .catch(e => console.error(e));
         },
-        toggleSelect(id) {
-            const idx = this.selectedIds.indexOf(id);
-            if (idx > -1) this.selectedIds.splice(idx, 1);
-            else this.selectedIds.push(id);
-        },
-        formatTime(t) { return t ? new Date(t).toLocaleString('zh-CN') : ''; },
+        formatTime(t) { return t ? new Date(t).toLocaleString('zh-CN') : 'N/A'; },
         handleCopy(name) { navigator.clipboard.writeText(location.origin+'/file/'+name).then(()=>this.$message.success('Copied!')); },
-        handleDelete(index, key) {
-          if(confirm('Delete?')) fetch(`./api/manage/delete/${key}`, {credentials:'include'}).then(()=>{this.tableData.splice(index,1);});
-        },
-        handleBatchDelete() {
-          if(confirm('Delete selected?')) fetch("./api/manage/delete_batch", {
-              method: 'POST', body: JSON.stringify({ ids: this.selectedIds }), headers: {'Content-Type':'application/json'}, credentials: 'include'
-          }).then(() => { this.selectedIds = []; this.fetchData(); });
-        },
-        handleLogout() { 
-            document.cookie = "manage_session=; Max-Age=0; path=/;"; 
-            location.reload(); 
-        }
+        handleLogout() { document.cookie = "manage_session=; Max-Age=0; path=/;"; location.reload(); }
       },
       mounted() { this.fetchData(); }
     });
