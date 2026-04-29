@@ -48,3 +48,20 @@
 
 ## 👨‍💻 访问后台
 全部配置完成并重新部署后，在浏览器访问 `https://你的域名.pages.dev/admin`，即可看到全新的管理页面登录框。输入你设置的 `ADMIN_USER` 和 `ADMIN_PASS` 即可进入图床控制台。
+
+---
+
+## 📜 声明与鸣谢
+
+**🌟 特别鸣谢 (Acknowledgements)**
+- 感谢上游原项目 [cf-pages/Telegraph-Image](https://github.com/cf-pages/Telegraph-Image) 及最初思路提供者（Hostloc @feixiang 与 @乌拉擦）。本项目是在其出色的基础代码上进行的 UI 重构与深度增强。
+- 感谢 [Cloudflare](https://www.cloudflare.com/) 提供极其优秀的 Pages 托管服务与全球边缘计算网络。
+- 感谢 [Telegram](https://telegram.org/) 提供强大且良心的 Bot API 与无限制的频道存储空间。
+
+**⚖️ 免责声明 (Disclaimer)**
+- 本项目仅供技术学习与代码交流参考，**严禁**用于任何违反当地法律法规、公序良俗的用途。
+- 部署者须对用户上传的所有图片内容自行承担最终审查与管理责任（建议配合开启鉴黄 API 功能）。
+- 开发者不对因使用本项目带来的任何数据泄露、丢失、滥用或平台账号封禁（如 Telegram 频道被封停、Cloudflare 账号被限制等）以及相关的连带法律纠纷承担任何责任。使用本项目即代表同意本声明。
+
+**📝 开源协议 (License)**
+本项目保留上游的开源精神，基于 **MIT License** 开放源代码。

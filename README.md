@@ -48,3 +48,20 @@ To make the image host and the beautiful admin dashboard work properly, go to yo
 
 ## 👨‍💻 Access the Admin Dashboard
 Once everything is configured and redeployed, simply visit `https://your-domain.pages.dev/admin` in your browser. You will be greeted by the brand-new login screen. Enter your `ADMIN_USER` and `ADMIN_PASS` to access your image hosting console.
+
+---
+
+## 📜 Acknowledgements & Disclaimer
+
+**🌟 Acknowledgements**
+- Special thanks to the upstream project [cf-pages/Telegraph-Image](https://github.com/cf-pages/Telegraph-Image) and the original concept contributors (Hostloc @feixiang and @乌拉擦). This project is a deeply refactored and UI-enhanced fork based on their excellent foundation.
+- Thanks to [Cloudflare](https://www.cloudflare.com/) for providing fantastic Pages hosting and an unparalleled global edge network.
+- Thanks to [Telegram](https://telegram.org/) for offering the incredibly generous Bot API and limitless Channel storage space.
+
+**⚖️ Disclaimer**
+- This project is provided for educational and research purposes only. It is **strictly prohibited** to use this project for hosting or distributing illegal, copyrighted, or adult content that violates local laws and regulations.
+- The deployer assumes full responsibility for moderating and managing all user-uploaded content (enabling the Image Moderation API is highly recommended).
+- The developers assume absolutely no liability for any data loss, abuse, platform account bans (e.g., Telegram channel suspensions or Cloudflare account restrictions), or legal disputes arising from the use of this project. By deploying this project, you agree to these terms.
+
+**📝 License**
+This project continues the open-source spirit of its upstream and is released under the **MIT License**.
