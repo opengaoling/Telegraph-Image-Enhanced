@@ -58,7 +58,13 @@
         },
         formatTime(t) { return t ? new Date(t).toLocaleString('zh-CN') : 'N/A'; },
         handleCopy(name) { navigator.clipboard.writeText(location.origin+'/file/'+name).then(()=>this.$message.success('Copied!')); },
-        handleLogout() { document.cookie = "manage_session=; Max-Age=0; path=/;"; location.reload(); }
+        handleLogout() { 
+            fetch('/api/manage/logout', { method: 'POST', credentials: 'include' })
+                .then(() => {
+                    this.$message.success('已退出登录');
+                    setTimeout(() => location.reload(), 500);
+                });
+        }
       },
       mounted() { this.fetchData(); }
     });
