@@ -107,7 +107,9 @@
               method: 'POST', body: JSON.stringify({ ids: this.selectedIds }), headers: {'Content-Type':'application/json'}, credentials: 'include'
           }).then(() => { this.selectedIds = []; this.fetchData(); });
         },
-        handleLogout() { document.cookie = "manage_session=; Max-Age=0; path=/;"; location.reload(); },
+        handleLogout() { 
+            fetch('/api/manage/logout', {method: 'POST', credentials: 'include'}).then(()=>location.reload()); 
+        },
         handlePreview(name) {
           if (name.toLowerCase().endsWith('.mp4')) {
             window.open('/file/' + name, '_blank');
