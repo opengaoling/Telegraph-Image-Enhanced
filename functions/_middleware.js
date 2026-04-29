@@ -11,13 +11,13 @@ async function authentication(context) {
     const url = new URL(request.url);
 
     // 1. 基本检查
-    if (!env.BASIC_USER || !env.BASIC_PASS) return context.next();
+    if (!env.ADMIN_USER || !env.ADMIN_PASS) return context.next();
 
     // 2. 登录接口放行
     if (request.method === 'POST' && url.pathname.includes('/api/manage/login')) {
         try {
             const { user, pass } = await request.json();
-            if (user === env.BASIC_USER && pass === env.BASIC_PASS) {
+            if (user === env.ADMIN_USER && pass === env.ADMIN_PASS) {
                 const newToken = crypto.randomUUID();
                 await env.img_url.put("manage_session", newToken, { expirationTtl: 604800 });
                 return new Response(JSON.stringify({ success: true }), {

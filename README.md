@@ -139,11 +139,11 @@ January 18, 2023 - Image Management Feature Update
 ![](https://im.gurl.eu.org/file/a0c212d5dfb61f3652d07.png)
 ![](https://im.gurl.eu.org/file/48b9316ed018b2cb67cf4.png)
 
-2. The backend management page has a new login verification feature, also disabled by default. To enable, after deployment, go to the backend and click `Settings`->`Environment Variables`->`Define variables for production`->`Edit variables` and add the variables shown in the table below to enable login verification
+2. The backend management page supports a custom UI login verification feature (replaces the native browser Basic Auth popup with a built-in login page), disabled by default. To enable, after deployment, go to the backend and click `Settings`->`Environment Variables`->`Define variables for production`->`Edit variables` and add the variables shown in the table below to enable login verification
 | Variable Name | Value |
 | ----------- | ----------- |
-|BASIC_USER = | <Backend management page login username>|
-|BASIC_PASS = | <Backend management page login password>|
+|ADMIN_USER = | <Backend management page login username>|
+|ADMIN_PASS = | <Backend management page login password>|
 
 ![](https://im.gurl.eu.org/file/dff376498ac87cdb78071.png)
 
